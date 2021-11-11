@@ -1,0 +1,12 @@
+
+public class Woman extends Thread {
+
+	public Woman(int i) {
+		// TODO Auto-generated constructor stub
+	}
+	
+	@Override
+	public void run() {
+			System.out.println("");
+	}
+}

@@ -1,0 +1,50 @@
+import java.util.Scanner;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+public class Main {
+
+	final static int NUM_DWARFS = 7;
+	final static int NUM_SEATS = 4;
+	DinningRoom dr = new DinningRoom(NUM_SEATS);
+	Dwarf[] dwarfs;
+	SnowWhite snowhite;
+
+	Scanner kb = new Scanner(System.in);
+	
+	public void createThreads() {
+		 snowhite = new SnowWhite(dr);
+		for (int i = 0; i<NUM_DWARFS; i++) {
+			dwarfs[i] = new Dwarf(dr, i);
+		}
+	}
+	
+	public void startThreads() {
+		snowhite.start();
+		for (int i = 0; i<NUM_DWARFS; i++) {
+			dwarfs[i].start();
+		}
+	}
+	
+	public void endThreads() throws InterruptedException {
+		
+		snowhite.join();
+		for (int i = 0; i<NUM_DWARFS; i++) {
+			dwarfs[i].join();
+		}
+	}
+	
+	public void exec() throws InterruptedException {
+		createThreads();
+		startThreads();
+		kb.nextLine();
+		endThreads();
+		System.out.println("Goodbye");
+	}
+	
+	public static void main(String[] args) {
+		Main p = new Main();
+		p.exec();
+	}
+
+}

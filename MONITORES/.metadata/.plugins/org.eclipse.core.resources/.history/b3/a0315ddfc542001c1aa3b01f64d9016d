@@ -1,0 +1,53 @@
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+public class DinningRoom {
+	
+	int ocuppySeats, numPortions;
+	Lock mutex;
+	
+	boolean demands[];
+	Condition dwarfWaiting;
+	Condition dwarfEating;
+	Condition snowhiteWaiting;
+	Buffer bufferSilla, bufferDemanda;
+
+	
+	public DinningRoom(int numSeats) throws InterruptedException {
+		mutex= new ReentrantLock();
+		dwarfWaiting=mutex.newCondition();
+		dwarfEating=mutex.newCondition();
+		snowhiteWaiting=mutex.newCondition();
+		bufferSilla= new Buffer(Main.NUM_SEATS);
+		for(int i=0; i< Main.NUM_SEATS; i++) {
+			bufferSilla.put(i);
+		}
+		bufferDemanda= new Buffer(Main.NUM_SEATS);
+		///demands = 0;
+		numPortions=0;
+		ocuppySeats=0;
+	}
+
+	
+	public void serveDinner() throws InterruptedException {
+		mutex.lock();
+		int demanda= bufferDemanda.get();
+		System.out.println("Snowhite is cooking for dwarf "+demanda);
+		dwarfEating.signalAll();
+		mutex.unlock();		
+	}
+	
+	public int takeSeat(int id) throws InterruptedException {
+		int posicion=bufferSilla.get();
+		System.out.println("Dwarf "+id+" sits on seat "+ posicion +" and asks for food");
+		bufferDemanda.put(id);
+		return posicion;
+	}
+	public void eat(int id, int silla) throws InterruptedException {
+		mutex.lock();
+
+		System.out.println("Dwarf "+ id +" eats on seat" + silla+ " and goes to bed.");
+		mutex.unlock();
+	}
+}
