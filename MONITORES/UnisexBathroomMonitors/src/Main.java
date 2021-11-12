@@ -3,14 +3,14 @@
 public class Main {
 
 	final static int NUM_MANS= 10;
-	final static int NUM_WOMANS = 4;
+	final static int NUM_WOMANS = 10;
 	Toilet toilet;
 	Man[] man;
 	Woman[] woman;
 	
 	private void inicializar() throws InterruptedException {
 		toilet = new Toilet();
-		toilet.inicializarToilet();
+		toilet.initBuffer();
 		man = new Man[NUM_MANS];
 		woman = new Woman[NUM_WOMANS];
 	}
